@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Home, Database, Palette, Rocket, Sparkles } from "lucide-react";
+import { Home, Database, Palette, Rocket, Sparkles, Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DashboardTab } from "./tabs/DashboardTab";
 import { DataIngestionTab } from "./tabs/DataIngestionTab";
 import { TemplatesTab } from "./tabs/TemplatesTab";
+import { BuildPreviewTab } from "./tabs/BuildPreviewTab";
 import { DeploymentTab } from "./tabs/DeploymentTab";
 
-export type TabKey = "dashboard" | "data" | "templates" | "deploy";
+export type TabKey = "dashboard" | "data" | "templates" | "build" | "deploy";
 
 export interface AppState {
   githubConnected: boolean;
@@ -14,6 +15,7 @@ export interface AppState {
   resumeUploaded: boolean;
   certsCount: number;
   selectedTemplate: string | null;
+  siteBuilt: boolean;
   deployedUrl: string | null;
 }
 
@@ -21,6 +23,7 @@ const navItems: { key: TabKey; label: string; icon: typeof Home }[] = [
   { key: "dashboard", label: "Dashboard", icon: Home },
   { key: "data", label: "Data Ingestion", icon: Database },
   { key: "templates", label: "Templates", icon: Palette },
+  { key: "build", label: "Build & Preview", icon: Wand2 },
   { key: "deploy", label: "Deployment", icon: Rocket },
 ];
 
@@ -32,6 +35,7 @@ export function PortfolioAIApp() {
     resumeUploaded: false,
     certsCount: 0,
     selectedTemplate: null,
+    siteBuilt: false,
     deployedUrl: null,
   });
 
@@ -94,6 +98,7 @@ export function PortfolioAIApp() {
           )}
           {tab === "data" && <DataIngestionTab state={state} update={update} />}
           {tab === "templates" && <TemplatesTab state={state} update={update} />}
+          {tab === "build" && <BuildPreviewTab state={state} update={update} onNavigate={setTab} />}
           {tab === "deploy" && <DeploymentTab state={state} update={update} />}
         </div>
       </main>
