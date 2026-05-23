@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Github,
   Linkedin,
@@ -10,7 +10,7 @@ import {
   Sparkles,
   FileBadge,
 } from "lucide-react";
-import type { AppState } from "../App";
+import type { AppState, TabKey } from "../App";
 import { cn } from "@/lib/utils";
 
 interface QueueItem {
@@ -22,9 +22,11 @@ interface QueueItem {
 export function DataIngestionTab({
   state,
   update,
+  onNavigate,
 }: {
   state: AppState;
   update: (p: Partial<AppState>) => void;
+  onNavigate: (t: TabKey) => void;
 }) {
   const [ghUser, setGhUser] = useState("ritika-chawla");
   const [ghLoading, setGhLoading] = useState(false);
@@ -36,6 +38,16 @@ export function DataIngestionTab({
   ]);
   const [parsing, setParsing] = useState(false);
   const certInputRef = useRef<HTMLInputElement>(null);
+
+  const ingestionReady =
+    state.githubConnected && state.linkedinConnected && state.resumeUploaded;
+
+  useEffect(() => {
+    if (ingestionReady && !parsing && !state.selectedTemplate) {
+      const id = setTimeout(() => onNavigate("templates"), 900);
+      return () => clearTimeout(id);
+    }
+  }, [ingestionReady, parsing, state.selectedTemplate, onNavigate]);
 
   const handleSyncGithub = () => {
     setGhLoading(true);
