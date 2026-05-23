@@ -96,8 +96,8 @@ export function PortfolioAIApp() {
           {tab === "dashboard" && (
             <DashboardTab state={state} onNavigate={setTab} />
           )}
-          {tab === "data" && <DataIngestionTab state={state} update={update} />}
-          {tab === "templates" && <TemplatesTab state={state} update={update} />}
+          {tab === "data" && <DataIngestionTab state={state} update={update} onNavigate={setTab} />}
+          {tab === "templates" && <TemplatesTab state={state} update={update} onNavigate={setTab} />}
           {tab === "build" && <BuildPreviewTab state={state} update={update} onNavigate={setTab} />}
           {tab === "deploy" && <DeploymentTab state={state} update={update} />}
         </div>

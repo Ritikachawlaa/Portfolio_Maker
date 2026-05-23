@@ -1,5 +1,6 @@
+import { useEffect } from "react";
 import { Check, Eye } from "lucide-react";
-import type { AppState } from "../App";
+import type { AppState, TabKey } from "../App";
 import { cn } from "@/lib/utils";
 
 function MinimalistPreview() {
@@ -68,10 +69,19 @@ const templates = [
 export function TemplatesTab({
   state,
   update,
+  onNavigate,
 }: {
   state: AppState;
   update: (p: Partial<AppState>) => void;
+  onNavigate: (t: TabKey) => void;
 }) {
+  useEffect(() => {
+    if (state.selectedTemplate && !state.siteBuilt) {
+      const id = setTimeout(() => onNavigate("build"), 800);
+      return () => clearTimeout(id);
+    }
+  }, [state.selectedTemplate, state.siteBuilt, onNavigate]);
+
   return (
     <div className="space-y-8">
       <header>
